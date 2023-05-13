@@ -2,6 +2,7 @@
 #include<stdlib.h>
 #include<string.h>
 
+#define SIZE 100
 typedef int Data;
 
 typedef struct Player
@@ -15,11 +16,16 @@ typedef struct Player
 typedef struct Team
 {
     int numOfPlayers;
-    int score;
+    float score;
     char* teamName;
     Player *player;
     struct Team *next;
 } Team;
+
+typedef struct Top8{
+    Team *val;
+    struct Top8 *next;
+}Top8;
 
 void addAtBeginningTeam(Team **head, int numofPlayers, char* teamName, Player *player)
 {
@@ -142,16 +148,17 @@ Team* calculateALLTeamScore(Team *team)
     while(copy != NULL)
         {
             copy->score = calculateTeamScore(copy->player);
+            copy->score /= team->numOfPlayers;
             copy = copy->next;
         }
     return team;
 }
 
-int calculateMinScore(Team *team)
+float calculateMinScore(Team *team)
 {
     Team *copy;
     copy = (Team*)malloc(sizeof(Team));
-    int minimum = 10000;
+    float minimum = 10000;
     copy = team;
     while(copy != NULL)
     {
@@ -162,7 +169,7 @@ int calculateMinScore(Team *team)
     return minimum;
 }
 
-void removeTeam(Team **team, int x)
+void removeTeam(Team **team, float x)
 {
     if(*team == NULL) return;
     Team *copy;
@@ -202,8 +209,32 @@ void removeTeam(Team **team, int x)
 int calculateNMin(int num)
 {
     int x=1;
-    while(x < num)
+    while(x <= num)
         x*=2;
     x/=2;
     return x;
 }
+
+//********************** TASK 3 ************************
+
+void addAtBeginning(Top8 **head, Team *v)
+{
+	Top8* newNode = (Top8*)malloc(sizeof(Top8));
+	newNode->val = v;
+	newNode->next = *head;
+	*head = newNode;
+}
+
+void addAtEnd(Top8** head, Team *v)
+{
+	Top8 *aux=*head;
+	Top8* newNode = (Top8*)malloc(sizeof(Top8));
+	newNode->val = v;
+	if (*head == NULL) addAtBeginning(&*head, v);
+	else{
+		while (aux->next!=NULL) aux = aux->next;
+		aux->next = newNode;
+		newNode->next = NULL;
+	}
+}
+
