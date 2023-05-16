@@ -1,15 +1,23 @@
+#include<stdio.h>
+#include<stdlib.h>
+#include<string.h>
+
 #include "player.h"
 #include "stive.h"
 #include "cozi.h"
+#include "BST.h"
+#include "tasks.h"
 
 int main(int argc, char *argv[])
 {
-    Team *teams;
-    teams = NULL;
-
     FILE *inputFile, *cFile;
     cFile = fopen(argv[1], "rt");
     //cFile = fopen("c.in", "rt");
+    if(cFile == NULL)
+    {
+        printf("File could not be opened");
+        exit(1);
+    }
     int *cinput;
     cinput = (int*)malloc(5*sizeof(int));
     for(int i = 0; i < 5; i++)
@@ -23,49 +31,15 @@ int main(int argc, char *argv[])
         exit(1);
     }
 
+//************************** TASK 1 *******************************
+    Team *teams;
+    teams = NULL;
     int numOfTeams;
-    char *buffer;
-    buffer = (char*)malloc(sizeof(char)*2);
-
-    fscanf(inputFile, "%d", &numOfTeams);
-    fgets(buffer , 2, inputFile);
-
-
-    for(int i = 0; i < numOfTeams; i++)
-    {
-        int numOfPlayers;
-        char *teamName;
-        teamName = (char*)malloc(SIZE*sizeof(char));
-
-        fscanf(inputFile, "%d", &numOfPlayers);
-        fgets(buffer , 2, inputFile);
-        fgets(teamName, SIZE, inputFile);
-
-        Player *player;
-        player = NULL;
-        for(int j = 0; j < numOfPlayers; j++)
-        {
-            char* firstName;
-            char* secondName;
-            int points;
-            firstName = (char*)malloc(sizeof(char));
-            secondName = (char*)malloc(sizeof(char));
-            fscanf(inputFile, "%s", firstName);
-            fgets(buffer , 2, inputFile);
-            fscanf(inputFile, "%s", secondName);
-            fgets(buffer , 2, inputFile);
-            fscanf(inputFile, "%d", &points);
-            fgets(buffer , 2, inputFile);
-            addAtBeginningPlayer(&player, firstName, secondName, points);
-        }
-        addAtBeginningTeam(&teams, numOfPlayers, teamName, player);   
-    }
-
+    if(cinput[0] == 1)
+    task1(inputFile, &teams, &numOfTeams);
     fclose(inputFile);
 
-
     //   AFISARE
-
     FILE *outputFile;
     outputFile = fopen(argv[3], "wt");
     //outputFile = fopen("r.out", "wt");
@@ -76,16 +50,6 @@ int main(int argc, char *argv[])
     }
 
 //************************** TASK 2 *******************************
-
-    Team *copy;
-    copy = teams;
-    for(int i = numOfTeams-1; i>=0; i--)
-    {
-        copy->teamName[strlen(copy->teamName) - 2] = '\0';
-        while(copy->teamName[strlen(copy->teamName)-1] == ' ')
-            copy->teamName[strlen(copy->teamName)-1] = '\0';
-        copy = copy->next;
-    }
 
     if(cinput[1] == 1)
     {
@@ -164,17 +128,18 @@ int main(int argc, char *argv[])
                 Stack *top;
                 top = winners;
                 //punem in top8 echipele din winners pt bst
-                while(!isEmptyStack(top))
+                while(top != NULL)
                 {
-                    addAtEnd(&top8, pop(&top)); 
+                    addAtEnd(&top8, top->val); 
+                    top = top->next;
                 }
                 Top8 *aux = top8;
-                while(aux->next->next != NULL)
+                while(!isEmptyStack(winners))
                 {
-                    enQueue(match, aux->val, aux->next->val);
-                    aux = aux->next->next;
+                    A = pop(&winners);
+                    B = pop(&winners);
+                    enQueue(match, A, B);
                 }
-                enQueue(match, aux->val, aux->next->val);
                 numOfTeams/=2;
                 deleteStack(&winners);
                 continue;
@@ -192,7 +157,15 @@ int main(int argc, char *argv[])
        deleteStack(&winners);
     }
 
-
+    if(cinput[3] == 1)
+    {
+        Graph *graph;
+        graph = (Graph*)malloc(sizeof(Graph));
+        graph = NULL;
+        graph = createBST(graph, top8);
+        fprintf(outputFile, "\nTOP 8 TEAMS:\n");
+        inorder(graph, outputFile);
+    }
     fclose(outputFile);
     fclose(cFile);
     deleteTeam(&teams);

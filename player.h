@@ -1,7 +1,3 @@
-#include<stdio.h>
-#include<stdlib.h>
-#include<string.h>
-
 #define SIZE 100
 typedef int Data;
 
@@ -23,7 +19,8 @@ typedef struct Team
 } Team;
 
 typedef struct Top8{
-    Team *val;
+    char *teamName;
+    float score;
     struct Top8 *next;
 }Top8;
 
@@ -220,7 +217,8 @@ int calculateNMin(int num)
 void addAtBeginning(Top8 **head, Team *v)
 {
 	Top8* newNode = (Top8*)malloc(sizeof(Top8));
-	newNode->val = v;
+	newNode->teamName = v->teamName;
+    newNode->score = v->score;
 	newNode->next = *head;
 	*head = newNode;
 }
@@ -229,7 +227,8 @@ void addAtEnd(Top8** head, Team *v)
 {
 	Top8 *aux=*head;
 	Top8* newNode = (Top8*)malloc(sizeof(Top8));
-	newNode->val = v;
+	newNode->teamName = v->teamName;
+    newNode->score = v->score;
 	if (*head == NULL) addAtBeginning(&*head, v);
 	else{
 		while (aux->next!=NULL) aux = aux->next;
