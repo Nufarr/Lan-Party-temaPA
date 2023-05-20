@@ -5,7 +5,9 @@
 #include "player.h"
 #include "stive.h"
 #include "cozi.h"
+#include "Top8.h"
 #include "BST.h"
+#include "AVL.h"
 #include "tasks.h"
 
 int main(int argc, char *argv[])
@@ -54,8 +56,8 @@ int main(int argc, char *argv[])
     if(cinput[1] == 1)
     {
         teams = calculateALLTeamScore(teams);
-        int Nmin = calculateNMin(numOfTeams);
-        while(numOfTeams > Nmin)
+        int Nmax = calculateNMax(numOfTeams);
+        while(numOfTeams > Nmax)
         {
             float minScore  = calculateMinScore(teams);
             removeTeam(&teams, minScore);
@@ -130,10 +132,10 @@ int main(int argc, char *argv[])
                 //punem in top8 echipele din winners pt bst
                 while(top != NULL)
                 {
-                    addAtEnd(&top8, top->val); 
+                    pushTop8(&top8, top->val->teamName, top->val->score); 
                     top = top->next;
                 }
-                Top8 *aux = top8;
+                
                 while(!isEmptyStack(winners))
                 {
                     A = pop(&winners);
@@ -156,15 +158,37 @@ int main(int argc, char *argv[])
        }
        deleteStack(&winners);
     }
-
+    Top8 *top8ord;
     if(cinput[3] == 1)
     {
-        Graph *graph;
-        graph = (Graph*)malloc(sizeof(Graph));
-        graph = NULL;
-        graph = createBST(graph, top8);
+        Graph *bst;
+        bst = (Graph*)malloc(sizeof(Graph));
+        bst = NULL;
+        bst = createBST(bst, top8);
         fprintf(outputFile, "\nTOP 8 TEAMS:\n");
-        inorder(graph, outputFile);
+        //inorder(bst, outputFile);
+        
+        inorder(bst, &top8ord);
+        Top8 *aux;
+        aux = top8ord;
+        while(aux != NULL)
+        {
+            fprintf(outputFile, "%-33s -  %0.2f\n", aux->teamName, aux->score);
+            aux = aux->next;
+        }
+    }
+
+    if(cinput[4] == 1)
+    {
+        Graph *avl = NULL;
+        //int i = 0;
+        while(top8ord != NULL)
+        {
+            avl = insertAVL(avl, top8ord);
+            top8ord = top8ord->next;
+        }
+        fprintf(outputFile, "\nTHE LEVEL 2 TEAMS ARE:\n");
+        displayLvl2(avl, outputFile);
     }
     fclose(outputFile);
     fclose(cFile);

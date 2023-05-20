@@ -18,12 +18,6 @@ typedef struct Team
     struct Team *next;
 } Team;
 
-typedef struct Top8{
-    char *teamName;
-    float score;
-    struct Top8 *next;
-}Top8;
-
 void addAtBeginningTeam(Team **head, int numofPlayers, char* teamName, Player *player)
 {
 	Team* newNode = (Team*)malloc(sizeof(Team));
@@ -33,22 +27,7 @@ void addAtBeginningTeam(Team **head, int numofPlayers, char* teamName, Player *p
     newNode->player = player;
 	*head = newNode;
 }
-/*
-void addAtEndTeam(Team** head, int numofPlayers, char* teamName, Player *player)
-{
-	Team *aux=*head;
-	Team* newNode = (Team*)malloc(sizeof(Team));
-	newNode->numOfPlayers = numofPlayers;
-    newNode->teamName = teamName;
-    newNode->player = player;
-	if (*head == NULL) addAtBeginningTeam(&*head, numofPlayers, teamName, player);
-	else{
-		while (aux->next!=NULL) aux = aux->next;
-		aux->next = newNode;
-		newNode->next = NULL;
-	}
-}
-*/
+
 void addAtBeginningPlayer(Player **head, char *firstName, char *secondName, int points)
 {
 	Player* newNode = (Player*)malloc(sizeof(Player));
@@ -58,55 +37,15 @@ void addAtBeginningPlayer(Player **head, char *firstName, char *secondName, int 
 	newNode->next = *head;
 	*head = newNode;
 }
-/*
-void addAtEndPlayer(Player** head, char *firstName, char *secondName, int points)
-{
-	Player *aux=*head;
-	Player* newNode = (Player*)malloc(sizeof(Player));
-	newNode->points = points;
-    newNode->firstName = firstName;
-    newNode->secondName = secondName;
-	if (*head == NULL) addAtBeginningPlayer(&*head, firstName, secondName, points);
-	else{
-		while (aux->next!=NULL) aux = aux->next;
-		aux->next = newNode;
-		newNode->next = NULL;
-	}
-}
-*/
+
 void displayTeams(Team *teams, int numOfTeams, FILE *outputFile)
 {
-    //fprintf(outputFile, "%d\n\n", numOfTeams);
-
     while (teams!=NULL)
     {
-		//fprintf(outputFile, "%d ", teams->numOfPlayers);
         fprintf(outputFile, "%s\n", teams->teamName);
-        /*
-        while (teams -> player!=NULL)
-        {
-            fprintf(outputFile,"%s ", teams->player->firstName);
-            fprintf(outputFile,"%s ", teams->player->secondName);
-            fprintf(outputFile,"%d\n", teams->player->points);
-	    teams->player = teams->player->next;
-        }
-        fprintf(outputFile, "_____________________________________\n");
-        */
        teams=teams->next;
     }
 }
-
-/*
-void displayTeam(Team *head)
-{
-	while (head!=NULL){
-		printf ("%d ", head->);
-		head=head->next;
-	}
-	printf("\n");
-}
-
-*/
 
 void deleteTeam(Team **head)
 {
@@ -177,15 +116,7 @@ void removeTeam(Team **team, float x)
         free(copy);
         return;
     }
-    /*
-    while(copy->next->score != x)
-    {
-        copy = copy->next;
-    }
-    Team* newNode=copy->next;
-    free(copy);
-    copy=newNode;
-    */
+
    Team *prev;
    while(copy != NULL)
    {
@@ -203,37 +134,12 @@ void removeTeam(Team **team, float x)
     //return;
 }
 
-int calculateNMin(int num)
+int calculateNMax(int num)
 {
     int x=1;
     while(x <= num)
         x*=2;
     x/=2;
     return x;
-}
-
-//********************** TASK 3 ************************
-
-void addAtBeginning(Top8 **head, Team *v)
-{
-	Top8* newNode = (Top8*)malloc(sizeof(Top8));
-	newNode->teamName = v->teamName;
-    newNode->score = v->score;
-	newNode->next = *head;
-	*head = newNode;
-}
-
-void addAtEnd(Top8** head, Team *v)
-{
-	Top8 *aux=*head;
-	Top8* newNode = (Top8*)malloc(sizeof(Top8));
-	newNode->teamName = v->teamName;
-    newNode->score = v->score;
-	if (*head == NULL) addAtBeginning(&*head, v);
-	else{
-		while (aux->next!=NULL) aux = aux->next;
-		aux->next = newNode;
-		newNode->next = NULL;
-	}
 }
 

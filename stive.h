@@ -1,4 +1,3 @@
-//#include "player.h"
 
 typedef struct Stack{
     Team *val;

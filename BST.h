@@ -1,5 +1,6 @@
 
 typedef struct Graph{
+    int height;
     char *teamName;
     float score;
     struct Graph *left, *right;
@@ -31,6 +32,7 @@ Graph* insert(Graph *graph, Top8 *key)
         else if(strcmp(key->teamName, graph->teamName) > 0)
         graph->right = insert(graph->right, key);
     }
+    //graph->height = 1 + max(graphHeight(graph->left),graphHeight(graph->right));
     return graph;
 }
 
@@ -46,11 +48,11 @@ Graph* createBST(Graph *graph, Top8 *top)
     return graph;
 }
 
-Graph* inorder(Graph *graph, FILE* outputFile)
+Graph* inorder(Graph *graph, Top8 **top8ord)
 {
     if(graph){
-        inorder(graph->right, outputFile);
-        fprintf(outputFile, "%-33s -  %0.2f\n", graph->teamName, graph->score);
-        inorder(graph->left, outputFile);
+        inorder(graph->right, top8ord);
+        addAtEnd(top8ord, graph->teamName, graph->score);
+        inorder(graph->left, top8ord);
     }
 }
