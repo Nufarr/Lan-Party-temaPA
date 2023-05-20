@@ -24,9 +24,8 @@ int isEmpty(Queue*q){
 }
 
  void enQueue(Queue*q, Team *a, Team *b){
-	Node* newNode=(Node*)malloc(sizeof(Node));
-	newNode->teamA = (Team*)malloc(SIZE*sizeof(Team));
-	newNode->teamB = (Team*)malloc(SIZE*sizeof(Team));
+	Node* newNode = NULL;
+	newNode = (Node*)malloc(sizeof(Node));
 	newNode->teamA = a;
 	newNode->teamB = b;
 	newNode->next=NULL;
@@ -62,15 +61,15 @@ void deQueue(Queue**q, Team **teamA, Team **teamB) {
 	//return team;
 }
 
-void deleteQueue(Queue **q){
-	Node* aux;
-	while (!isEmpty(*q)){
-		aux=(*q)->head;
-		(*q)->head=(*q)->head->next;
-		free(aux);
-		free((*q)->tail);
-	}
-	free(q);
+Queue* createMatches(Queue *match, Team *teams)
+{
+	Team *copy = teams;
+    while(copy != NULL)
+    {
+        enQueue(match, copy, copy->next);
+        copy = copy->next->next;
+    }
+	return match;
 }
 
 void displayOpponents(Queue *match, FILE *outputFile)

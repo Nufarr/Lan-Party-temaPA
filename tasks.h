@@ -1,7 +1,7 @@
-void task1(FILE* inputFile, Team **t1teams, int *t1numOfTeams)
+void task1(FILE* inputFile, Team **T1teams, int *T1numOfTeams)
 {
-    Team *teams = *t1teams;
-    int numOfTeams = *t1numOfTeams;
+    Team *teams = *T1teams;
+    int numOfTeams = *T1numOfTeams;
     char *buffer;
     buffer = (char*)malloc(sizeof(char)*2);
 
@@ -25,8 +25,8 @@ void task1(FILE* inputFile, Team **t1teams, int *t1numOfTeams)
             char* firstName;
             char* secondName;
             int points;
-            firstName = (char*)malloc(sizeof(char));
-            secondName = (char*)malloc(sizeof(char));
+            firstName = (char*)malloc(SIZE*sizeof(char));
+            secondName = (char*)malloc(SIZE*sizeof(char));
             fscanf(inputFile, "%s", firstName);
             fgets(buffer , 2, inputFile);
             fscanf(inputFile, "%s", secondName);
@@ -37,7 +37,7 @@ void task1(FILE* inputFile, Team **t1teams, int *t1numOfTeams)
         }
         addAtBeginningTeam(&teams, numOfPlayers, teamName, player);   
     }
-
+    free(buffer);
     //pentru spatiile in plus din checker
     Team *copy;
     copy = teams;
@@ -48,7 +48,86 @@ void task1(FILE* inputFile, Team **t1teams, int *t1numOfTeams)
             copy->teamName[strlen(copy->teamName)-1] = '\0';
         copy = copy->next;
     }
+    *T1teams = teams;
+    *T1numOfTeams = numOfTeams;
+}
 
-    *t1teams = teams;
-    *t1numOfTeams = numOfTeams;
+void task2(Team **T2teams, int *T2numOfTeams)
+{
+    Team *teams = *T2teams;
+    int numOfTeams = *T2numOfTeams;
+    teams = calculateALLTeamScore(teams);
+        int Nmax = calculateNMax(numOfTeams);
+        while(numOfTeams > Nmax)
+        {
+            float minScore  = calculateMinScore(teams);
+            removeTeam(&teams, minScore);
+            numOfTeams--;
+        }
+    *T2teams = teams;
+    *T2numOfTeams = numOfTeams;
+}
+
+Top8 *createTop8(Top8 *top8, Stack **winners, Queue **match)
+{
+    Stack *top;
+    top = *winners;
+    //punem in top8 echipele din winners pt bst
+    while(top != NULL)
+    {
+        pushTop8(&top8, top->val->teamName, top->val->score); 
+        top = top->next;
+    }
+                
+    while(!isEmptyStack(*winners))
+    {
+        Team *A = pop(winners);
+        Team *B = pop(winners);
+        enQueue(*match, A, B);
+    }
+
+    return top8;
+}
+
+void task3(Top8 **T3top8,Team **T3teams, int numOfTeams, FILE *outputFile)
+{
+    Team *teams = *T3teams;
+    Top8 *top8 = *T3top8;
+    Queue *match = NULL;
+        match = createQueue(match, teams);
+        Stack *winners = NULL;
+        Stack *losers = NULL;
+        int roundNum = 0;
+        createMatches(match, teams);
+        Team *A = NULL,*B = NULL;
+        
+        while(numOfTeams != 1)
+        {
+            roundNum ++;
+            fprintf(outputFile, "\n--- ROUND NO:%d", roundNum);
+            displayOpponents(match, outputFile);
+            decideWinnersAndLosers(&match, &winners, &losers, &A, &B);
+            fprintf(outputFile, "\nWINNERS OF ROUND NO:%d", roundNum);
+            displayWinners(winners, outputFile);
+
+            if(numOfTeams/2 == 8)
+            {
+                top8 = createTop8(top8, &winners, &match);
+                numOfTeams/=2;
+                deleteStack(&winners);
+                continue;
+            }
+            numOfTeams/=2;
+            deleteStack(&losers);
+            while(!isEmptyStack(winners))
+            {
+                A = pop(&winners);
+                B = pop(&winners);
+                enQueue(match, A, B);
+            }
+       }
+       deleteStack(&winners);
+       free(match); // a ramas o singura echipa
+       deleteAllTeams(T3teams);
+       *T3top8 = top8;
 }

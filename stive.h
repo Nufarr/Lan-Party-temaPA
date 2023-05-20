@@ -37,6 +37,25 @@ void deleteStack(Stack **top){
 	}
 }
 
+void decideWinnersAndLosers(Queue **match,Stack **winners, Stack **losers, Team **A, Team **B)
+{
+    while(!isEmpty(*match))
+        {
+            deQueue(match, A, B);
+            if((*A)->score <= (*B)->score)
+            {
+                push(losers, *A);
+                (*B)->score++;
+                push(winners, *B);
+            }
+            else
+            {
+                push(losers, *B);
+                (*A)->score++;
+                push(winners, *A);   
+            }
+        }
+}
 
 void displayWinners(Stack *winners, FILE *outputFile)
 {

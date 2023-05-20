@@ -35,3 +35,13 @@ void addAtEnd(Top8** head, char *teamName, float score)
 		newNode->next = NULL;
 	}
 }
+
+void deleteTop8(Top8** head)
+{
+	Top8  *aux;
+	while ((*head) != NULL){
+		aux=*head;
+		*head=(*head)->next;
+		free(aux);
+	}
+}

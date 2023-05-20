@@ -48,9 +48,9 @@ Graph* createBST(Graph *graph, Top8 *top)
     return graph;
 }
 
-Graph* inorder(Graph *graph, Top8 **top8ord)
+void inorder(Graph *graph, Top8 **top8ord)
 {
-    if(graph){
+    if(graph != NULL){
         inorder(graph->right, top8ord);
         addAtEnd(top8ord, graph->teamName, graph->score);
         inorder(graph->left, top8ord);

@@ -49,14 +49,26 @@ void displayTeams(Team *teams, int numOfTeams, FILE *outputFile)
 
 void deleteTeam(Team **head)
 {
+    Player *newPNode;
+    while((*head)->player!=NULL)
+        {
+            newPNode=((*head)->player)->next;
+            free((*head)->player);
+            (*head)->player = newPNode;
+        }
+    free(newPNode);
+    free(*head);
+}
+
+void deleteAllTeams(Team **head)
+{
     Team *newNode;
     while(*head!=NULL)
     {
         newNode=(*head)->next;
-        free(*head);
+        deleteTeam(head);
         *head=newNode;
     }
-
     *head=NULL;
 }
 
@@ -66,7 +78,7 @@ void deleteTeam(Team **head)
 int calculateTeamScore(Player *player)
 {
     int sum = 0;
-    Player *copy = (Player*)malloc(sizeof(Player));
+    Player *copy;
     copy = player;
     while(copy != NULL)
     {
@@ -79,7 +91,6 @@ int calculateTeamScore(Player *player)
 Team* calculateALLTeamScore(Team *team)
 {
     Team *copy;
-    copy = (Team*)malloc(sizeof(Team));
     copy = team;
     while(copy != NULL)
         {
@@ -109,11 +120,10 @@ void removeTeam(Team **team, float x)
 {
     if(*team == NULL) return;
     Team *copy;
-    //copy = (Team*)malloc(sizeof(Team));
     copy = *team;
     if(copy -> score == x){
         *team = (*team)->next;
-        free(copy);
+        deleteTeam(&copy);
         return;
     }
 
@@ -127,7 +137,7 @@ void removeTeam(Team **team, float x)
         else
         {
             prev->next = copy->next;
-            free(copy);
+            deleteTeam(&copy);
             return;
         }
    }
