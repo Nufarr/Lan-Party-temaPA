@@ -53,9 +53,12 @@ void deleteTeam(Team **head)
     while((*head)->player!=NULL)
         {
             newPNode=((*head)->player)->next;
+            free((*head)->player->firstName);
+            free((*head)->player->secondName);
             free((*head)->player);
             (*head)->player = newPNode;
         }
+    free((*head)->teamName);
     free(newPNode);
     free(*head);
 }

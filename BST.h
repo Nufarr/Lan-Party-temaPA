@@ -56,3 +56,13 @@ void inorder(Graph *graph, Top8 **top8ord)
         inorder(graph->left, top8ord);
     }
 }
+
+Graph* deleteGraph(Graph* graph)
+{
+    if(!graph) 
+    return graph;
+    deleteGraph(graph->right);
+    deleteGraph(graph->left);
+    //free(graph->teamName);
+    free(graph);
+}

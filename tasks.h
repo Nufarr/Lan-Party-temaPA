@@ -1,3 +1,4 @@
+//************************** TASK 1 *******************************
 void task1(FILE* inputFile, Team **T1teams, int *T1numOfTeams)
 {
     Team *teams = *T1teams;
@@ -52,6 +53,7 @@ void task1(FILE* inputFile, Team **T1teams, int *T1numOfTeams)
     *T1numOfTeams = numOfTeams;
 }
 
+//************************** TASK 2 *******************************
 void task2(Team **T2teams, int *T2numOfTeams)
 {
     Team *teams = *T2teams;
@@ -68,6 +70,7 @@ void task2(Team **T2teams, int *T2numOfTeams)
     *T2numOfTeams = numOfTeams;
 }
 
+//************************** TASK 3 *******************************
 Top8 *createTop8(Top8 *top8, Stack **winners, Queue **match)
 {
     Stack *top;
@@ -128,10 +131,11 @@ void task3(Top8 **T3top8,Team **T3teams, int numOfTeams, FILE *outputFile)
        }
        deleteStack(&winners);
        free(match); // a ramas o singura echipa
-       deleteAllTeams(T3teams);
+       //deleteAllTeams(T3teams);
        *T3top8 = top8;
 }
 
+//************************** TASK 4 *******************************
 void task4(Top8 *top8, Top8 **top8ord, FILE *outputFile)
 {
     Graph *bst;
@@ -149,8 +153,10 @@ void task4(Top8 *top8, Top8 **top8ord, FILE *outputFile)
         fprintf(outputFile, "%-33s -  %0.2f\n", aux->teamName, aux->score);
         aux = aux->next;
     }
+    bst = deleteGraph(bst);
 }
 
+//************************** TASK 5 *******************************
 void task5(Top8 *top8ord, FILE *outputFile)
 {
     Graph *avl = NULL;
@@ -161,4 +167,5 @@ void task5(Top8 *top8ord, FILE *outputFile)
     }
     fprintf(outputFile, "\nTHE LEVEL 2 TEAMS ARE:\n");
     displayLvl2(avl, outputFile);
+    avl = deleteGraph(avl);
 }
