@@ -73,38 +73,18 @@ int main(int argc, char *argv[])
         task3(&top8, &teams, numOfTeams, outputFile);
     }
 
+//************************** TASK 4 *******************************
     Top8 *top8ord = NULL;
     if(cinput[3] == 1)
     {
-        Graph *bst;
-        bst = (Graph*)malloc(sizeof(Graph));
-        bst = NULL;
-        bst = createBST(bst, top8);
-        fprintf(outputFile, "\nTOP 8 TEAMS:\n");
-        //inorder(bst, outputFile);
-        
-        inorder(bst, &top8ord);
-        Top8 *aux;
-        aux = top8ord;
-        while(aux != NULL)
-        {
-            fprintf(outputFile, "%-33s -  %0.2f\n", aux->teamName, aux->score);
-            aux = aux->next;
-        }
+        task4(top8, &top8ord, outputFile);
     }
     deleteTop8(&top8);
 
+//************************** TASK 5 *******************************
     if(cinput[4] == 1)
     {
-        Graph *avl = NULL;
-        //int i = 0;
-        while(top8ord != NULL)
-        {
-            avl = insertAVL(avl, top8ord);
-            top8ord = top8ord->next;
-        }
-        fprintf(outputFile, "\nTHE LEVEL 2 TEAMS ARE:\n");
-        displayLvl2(avl, outputFile);
+        task5(top8ord, outputFile);
     }
     deleteTop8(&top8ord);
     deleteAllTeams(&teams);

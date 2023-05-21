@@ -131,3 +131,34 @@ void task3(Top8 **T3top8,Team **T3teams, int numOfTeams, FILE *outputFile)
        deleteAllTeams(T3teams);
        *T3top8 = top8;
 }
+
+void task4(Top8 *top8, Top8 **top8ord, FILE *outputFile)
+{
+    Graph *bst;
+    bst = (Graph*)malloc(sizeof(Graph));
+    bst = NULL;
+    bst = createBST(bst, top8);
+    fprintf(outputFile, "\nTOP 8 TEAMS:\n");
+    //inorder(bst, outputFile);
+        
+    inorder(bst, top8ord);
+    Top8 *aux;
+    aux = *top8ord;
+    while(aux != NULL)
+    {
+        fprintf(outputFile, "%-33s -  %0.2f\n", aux->teamName, aux->score);
+        aux = aux->next;
+    }
+}
+
+void task5(Top8 *top8ord, FILE *outputFile)
+{
+    Graph *avl = NULL;
+    while(top8ord != NULL)
+    {
+        avl = insertAVL(avl, top8ord);
+        top8ord = top8ord->next;
+    }
+    fprintf(outputFile, "\nTHE LEVEL 2 TEAMS ARE:\n");
+    displayLvl2(avl, outputFile);
+}
