@@ -51,7 +51,7 @@ Graph* newGraphAVL(Top8* data)
     return graph;
 }
 
-Graph* insertAVL(Graph *graph, Top8 *key)
+Graph* insertAVL(Graph *graph, Top8 *key) //inserarea unui nod in avl
 {
 	if(graph == NULL)
         return newGraphAVL(key);
@@ -91,20 +91,8 @@ Graph* insertAVL(Graph *graph, Top8 *key)
 	return graph;
 }
 
-void displayLvl2(Graph *avl, FILE *outputFile)
+void displayLvl2(Graph *avl, FILE *outputFile) //afisseaza nivelul 2 din avl
 {
-	/*
-	if(avl->height == 1)
-		{
-			fprintf(outputFile, "%s\n%s\n", avl->left->teamName, avl->right->teamName);
-			return;
-		}
-	else
-	{
-		displayLvl2(avl->left, outputFile);
-		displayLvl2(avl->right, outputFile);
-	}
-	*/
 	Graph *ravl = avl->right, *lavl = avl->left;
 	fprintf(outputFile, "%s\n%s\n", ravl->right->teamName, ravl->left->teamName);
 	fprintf(outputFile, "%s\n%s\n", lavl->right->teamName, lavl->left->teamName);

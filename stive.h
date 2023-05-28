@@ -1,7 +1,7 @@
 
 typedef struct Stack{
+	struct Stack *next;
     Team *val;
-    struct Stack *next;
 }Stack;
 
 void push(Stack **top, Team *v) {
@@ -37,7 +37,7 @@ void deleteStack(Stack **top){
 	}
 }
 
-void decideWinnersAndLosers(Queue **match,Stack **winners, Stack **losers, Team **A, Team **B)
+void decideWinnersAndLosers(Queue **match,Stack **winners, Stack **losers, Team **A, Team **B) //creaza listele de catigatori si pierzatori
 {
     while(!isEmpty(*match))
         {
@@ -57,7 +57,7 @@ void decideWinnersAndLosers(Queue **match,Stack **winners, Stack **losers, Team 
         }
 }
 
-void displayWinners(Stack *winners, FILE *outputFile)
+void displayWinners(Stack *winners, FILE *outputFile) //afiseaza listele de castigatori
 {
 	while (winners!=NULL){
 		fprintf(outputFile, "\n%-33s -  %0.2f", winners->val->teamName, winners->val->score);

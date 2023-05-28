@@ -39,6 +39,7 @@ void task1(FILE* inputFile, Team **T1teams, int *T1numOfTeams)
         addAtBeginningTeam(&teams, numOfPlayers, teamName, player);   
     }
     free(buffer);
+
     //pentru spatiile in plus din checker
     Team *copy;
     copy = teams;
@@ -71,26 +72,6 @@ void task2(Team **T2teams, int *T2numOfTeams)
 }
 
 //************************** TASK 3 *******************************
-Top8 *createTop8(Top8 *top8, Stack **winners, Queue **match)
-{
-    Stack *top;
-    top = *winners;
-    //punem in top8 echipele din winners pt bst
-    while(top != NULL)
-    {
-        pushTop8(&top8, top->val->teamName, top->val->score); 
-        top = top->next;
-    }
-                
-    while(!isEmptyStack(*winners))
-    {
-        Team *A = pop(winners);
-        Team *B = pop(winners);
-        enQueue(*match, A, B);
-    }
-
-    return top8;
-}
 
 void task3(Top8 **T3top8,Team **T3teams, int numOfTeams, FILE *outputFile)
 {
@@ -100,7 +81,7 @@ void task3(Top8 **T3top8,Team **T3teams, int numOfTeams, FILE *outputFile)
         match = createQueue(match, teams);
         Stack *winners = NULL;
         Stack *losers = NULL;
-        int roundNum = 0;
+        int roundNum = 0; //numarul rundei la care suntem
         createMatches(match, teams);
         Team *A = NULL,*B = NULL;
         
@@ -110,9 +91,11 @@ void task3(Top8 **T3top8,Team **T3teams, int numOfTeams, FILE *outputFile)
             fprintf(outputFile, "\n--- ROUND NO:%d", roundNum);
             displayOpponents(match, outputFile);
             decideWinnersAndLosers(&match, &winners, &losers, &A, &B);
+            free(match);
             fprintf(outputFile, "\nWINNERS OF ROUND NO:%d", roundNum);
             displayWinners(winners, outputFile);
 
+            match = createQueue(match, teams);
             if(numOfTeams/2 == 8)
             {
                 top8 = createTop8(top8, &winners, &match);
@@ -143,8 +126,6 @@ void task4(Top8 *top8, Top8 **top8ord, FILE *outputFile)
     bst = NULL;
     bst = createBST(bst, top8);
     fprintf(outputFile, "\nTOP 8 TEAMS:\n");
-    //inorder(bst, outputFile);
-        
     inorder(bst, top8ord);
     Top8 *aux;
     aux = *top8ord;

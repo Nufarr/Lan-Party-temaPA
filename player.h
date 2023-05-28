@@ -3,9 +3,9 @@ typedef int Data;
 
 typedef struct Player
 {
+    int points;
     char* firstName;
     char* secondName;
-    int points;
     struct Player *next;
 } Player;
 
@@ -18,7 +18,7 @@ typedef struct Team
     struct Team *next;
 } Team;
 
-void addAtBeginningTeam(Team **head, int numofPlayers, char* teamName, Player *player)
+void addAtBeginningTeam(Team **head, int numofPlayers, char* teamName, Player *player) //adauga echipa la inceput
 {
 	Team* newNode = (Team*)malloc(sizeof(Team));
 	newNode->numOfPlayers = numofPlayers;
@@ -28,7 +28,7 @@ void addAtBeginningTeam(Team **head, int numofPlayers, char* teamName, Player *p
 	*head = newNode;
 }
 
-void addAtBeginningPlayer(Player **head, char *firstName, char *secondName, int points)
+void addAtBeginningPlayer(Player **head, char *firstName, char *secondName, int points) //adauga playeri la inceput
 {
 	Player* newNode = (Player*)malloc(sizeof(Player));
 	newNode->points = points;
@@ -38,7 +38,7 @@ void addAtBeginningPlayer(Player **head, char *firstName, char *secondName, int 
 	*head = newNode;
 }
 
-void displayTeams(Team *teams, int numOfTeams, FILE *outputFile)
+void displayTeams(Team *teams, int numOfTeams, FILE *outputFile) //afiseaza echipele
 {
     while (teams!=NULL)
     {
@@ -47,7 +47,7 @@ void displayTeams(Team *teams, int numOfTeams, FILE *outputFile)
     }
 }
 
-void deleteTeam(Team **head)
+void deleteTeam(Team **head) //sterge o echipa din lista
 {
     Player *newPNode;
     while((*head)->player!=NULL)
@@ -55,6 +55,7 @@ void deleteTeam(Team **head)
             newPNode=((*head)->player)->next;
             free((*head)->player->firstName);
             free((*head)->player->secondName);
+            //free((*head)->player->points);
             free((*head)->player);
             (*head)->player = newPNode;
         }
@@ -63,7 +64,7 @@ void deleteTeam(Team **head)
     free(*head);
 }
 
-void deleteAllTeams(Team **head)
+void deleteAllTeams(Team **head) //sterge toate echipele din liste
 {
     Team *newNode;
     while(*head!=NULL)
@@ -78,7 +79,17 @@ void deleteAllTeams(Team **head)
 
 //************************** TASK 2 *******************************
 
-int calculateTeamScore(Player *player)
+int calculateNMax(int num) //calculeaza numarul maxim de forma 2^n
+{
+    int x=1;
+    while(x <= num)
+        x*=2;
+    x/=2;
+    return x;
+}
+
+
+int calculateTeamScore(Player *player)  //calculeaza scorul pentru o echipa
 {
     int sum = 0;
     Player *copy;
@@ -91,7 +102,7 @@ int calculateTeamScore(Player *player)
     return sum;
 }
 
-Team* calculateALLTeamScore(Team *team)
+Team* calculateALLTeamScore(Team *team)  //calculeaza scorurile pentru toate echipe
 {
     Team *copy;
     copy = team;
@@ -104,7 +115,7 @@ Team* calculateALLTeamScore(Team *team)
     return team;
 }
 
-float calculateMinScore(Team *team)
+float calculateMinScore(Team *team)  //calculeaza scorul minim din toate echipele
 {
     Team *copy;
     copy = (Team*)malloc(sizeof(Team));
@@ -116,10 +127,11 @@ float calculateMinScore(Team *team)
             minimum = copy->score;
         copy = copy->next;
     }
+    free(copy);
     return minimum;
 }
 
-void removeTeam(Team **team, float x)
+void removeTeam(Team **team, float x) //sterge o echipa care are un scor dat
 {
     if(*team == NULL) return;
     Team *copy;
@@ -144,15 +156,6 @@ void removeTeam(Team **team, float x)
             return;
         }
    }
-    //return;
 }
 
-int calculateNMax(int num)
-{
-    int x=1;
-    while(x <= num)
-        x*=2;
-    x/=2;
-    return x;
-}
 

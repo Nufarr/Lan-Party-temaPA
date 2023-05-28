@@ -36,7 +36,28 @@ void addAtEnd(Top8** head, char *teamName, float score)
 	}
 }
 
-void deleteTop8(Top8** head)
+Top8 *createTop8(Top8 *top8, Stack **winners, Queue **match) //creaza lista de top 8 pentru task-ul 4
+{
+    Stack *top;
+    top = *winners;
+    //punem in top8 echipele din winners pt bst
+    while(top != NULL)
+    {
+        pushTop8(&top8, top->val->teamName, top->val->score); 
+        top = top->next;
+    }
+                
+    while(!isEmptyStack(*winners))
+    {
+        Team *A = pop(winners);
+        Team *B = pop(winners);
+        enQueue(*match, A, B);
+    }
+
+    return top8;
+}
+
+void deleteTop8(Top8** head)  //sterge lista de Top8
 {
 	Top8  *aux;
 	while ((*head) != NULL){

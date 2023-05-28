@@ -15,7 +15,7 @@ Graph* newGraph(Top8* data)
     return graph;
 }
 
-Graph* insert(Graph *graph, Top8 *key)
+Graph* insert(Graph *graph, Top8 *key) //insereaza un nod in bst
 {
     // daca subarborele este gol
     if(graph == NULL)
@@ -63,6 +63,7 @@ Graph* deleteGraph(Graph* graph)
     return graph;
     deleteGraph(graph->right);
     deleteGraph(graph->left);
-    //free(graph->teamName);
     free(graph);
+    graph = NULL;
+    return graph;
 }

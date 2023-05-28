@@ -1,4 +1,3 @@
-//#include "player.h"
 
 typedef struct Node{
     Team *teamA;
@@ -39,10 +38,8 @@ int isEmpty(Queue*q){
 
 void deQueue(Queue**q, Team **teamA, Team **teamB) {
 	Node *aux;
-	//Team *team;
-
-	if (isEmpty(*q)) return;
-
+	if (isEmpty(*q))
+		return;
 	*teamA = (*q)->head->teamA;
 	*teamB = (*q)->head->teamB;
 	aux=(*q)->head;
@@ -57,11 +54,9 @@ void deQueue(Queue**q, Team **teamA, Team **teamB) {
 		(*q)->head = (*q)->tail = NULL;
 		aux = NULL;
 	}
-	
-	//return team;
 }
 
-Queue* createMatches(Queue *match, Team *teams)
+Queue* createMatches(Queue *match, Team *teams) //creaza meciurile
 {
 	Team *copy = teams;
     while(copy != NULL)
@@ -72,7 +67,7 @@ Queue* createMatches(Queue *match, Team *teams)
 	return match;
 }
 
-void displayOpponents(Queue *match, FILE *outputFile)
+void displayOpponents(Queue *match, FILE *outputFile) //afiseaza continutul cozii, openenti
 {
 	Node *copy;
 	copy = match->head;
